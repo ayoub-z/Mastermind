@@ -1,15 +1,15 @@
-from random import choice
-import secrets
+import os
+import random
 from itertools import product
+from mastermind2 import *
 
 #############
 # VARIABLES #
 #############
 
-combinations = list(product('abcdcd', repeat=4)) # ALl possible combinations
-combis = [''.join(i) for i in combinations[:]] # Copy + cleaned up list of combinations
-code = secrets.choice(combis) 
-print('secret code is: ',code) # For testing
+raw_combinations = list(product('abcdef', repeat=4)) # ALl possible combinations
+combis = sorted([''.join(i) for i in raw_combinations[:]]) # cleaned up and sorted list of combinations
+code = random.choice(combis) 
 
 
 # Compares feedback of guess, with possible guesses to find matching combinations
@@ -31,73 +31,116 @@ def pins(guess, answer):
 		if colour in remainingAnswer:
 			white += 1
 			remainingAnswer.remove(colour)
-
 	return [black, white]
 
 
-##############
-# Strategies #
-##############
+
+
+def reduce_function(guess1):
+	# Making it global, so we can edit it
+	# BlackPin = int(input('Black pins: '))
+	# WhitePin = int(input('White pins: '))
+	BlackPin = pins(guess1, code)[0] # For automatic feedback when testing
+	WhitePin = pins(guess1,code)[1]
+	rightCombis = [] # for keeping the leftover possibilities
+
+	for possibilities in combis: # Goes through all possible combinations
+		if pins(guess1, possibilities) == [BlackPin, WhitePin]: # compares feedback of all combinations with given feedback
+			rightCombis.append(possibilities) # adds combinations that have matching feedback with given feedback in one list
+	return rightCombis
+
+
 
 def worst_case_strategy():
-	scores = {}
-	for guess1 in combis:
-		possibilities = {}
-		for guess2 in combis:
-			possible_feedback = tuple(pins(guess1, guess2))  
-			if possible_feedback in possibilities:
-				possibilities[possible_feedback] += 1
-			else:
-				possibilities[possible_feedback] = 1
-		scores[guess1] = max(possibilities.values())
-	best  = min(scores.values())
-	guess = ''
-	for possible_guess in scores.keys():
-		if scores[possible_guess] == best:
-			guess = possible_guess
-	return guess
+	all_possibilities = {}
+	if len(combis) == 1296:
+		return ('aabb')
+	else:
+		for guess1 in combis:
+			possibilities = {}
+			for guess2 in combis:
+				possible_feedback = tuple(pins(guess1, guess2))  
+				if possible_feedback in possibilities:
+					possibilities[possible_feedback] += 1
+				else:
+					possibilities[possible_feedback] = 1
+				all_possibilities[guess1] = max(possibilities.values())
+		best = min(all_possibilities.values())
+		guess = ''
+		for possible_guess in all_possibilities.keys():
+			if all_possibilities[possible_guess] == best:
+				guess = possible_guess
+		return guess
 
 # Can't get any simpler
 def simple_strategy():
 	return combis[0]
 
-
-def heuristic_strategy():
-	return secrets.choice(combis)
-	pass
-
-
-########
-# GAME #
-########
 		
-def ai_play():
+def play_WorstCaseStrat():
 	c = 0 # Keeps count on amount of guesses
-	global combis # Making it global, so we can edit it
+	global combis
 	while True:
+		guess = worst_case_strategy()
 		c += 1 
-		guess = heuristic_strategy() 
 		if len(combis) == 0: # Checks if 0 possibilites left
 			print('You probably gave wrong feedback pins. Try again')
 			quit()
 		print(f'Guess {c}: {guess}')
-		BlackPin = int(input('Black pins: ')) # Feedback black pin
-		if BlackPin == int(len(guess)): # Success message if 4 black pins
-			print(f'Got it in {c} turns!')
-			break
-		WhitePin = int(input('White pins: ')) # Feedback white pin
-		rightCombis = [] # for keeping the leftover possibilities
-		for possibilities in combis: # Goes through all possible combinations
-			if pins(guess, possibilities) == [BlackPin, WhitePin]: # compares feedback of all combinations with given feedback
-				rightCombis.append(possibilities) # adds combinations that have matching feedback with given feedback in one list
-		combis = rightCombis[:] # Updates combination list
-		print('Aantal mogelijkheden:',len(combis))
-		if len(combis) == 1: # Success message if only 1 possibility left
+		combis = reduce_function(guess)
+		print('\nAantal mogelijkheden2:',len(combis))
+		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
 			print(f'Your code is: {combis[0]}')
 			print(f'Got it in {c} turns')
 			break
 		else:
 			continue
 
-ai_play()
-		
+def play_SimpleStrat():
+	c = 0 # Keeps count on amount of guesses
+	global combis
+	while True:
+		# if len(combis) == 0: # Checks if 0 possibilites left
+		# 	print('You probably gave wrong feedback pins. Try again')
+		# 	quit()
+		guess = simple_strategy()
+		c += 1 
+		print(f'Guess {c}: {guess}')
+		combis = reduce_function(guess)
+		print('\nAantal mogelijkheden2:',len(combis))
+		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
+			print(f'Your code is: {combis[0]}')
+			print(f'Got it in {c} turns')
+			break
+		else:
+			continue
+
+
+def play():
+	os.system('clear')
+	choice = int(input(
+					   '===============Welcome=============== \n'
+					   'Let\'s start with choosing a strategy!\n\n'
+					   '1: Worst Case Strategy\n'
+					   '2: Simple Strategy\n'
+					   '3: I\'d rather guess the code myself \n\n'
+					   'Type the strategy number you want to use: '
+					  ))
+	print('')
+	if choice < 3:
+		print('Secret code is: ',code) # For testing
+		print('')
+	if choice == 1:
+		choice = play_WorstCaseStrat()
+	elif choice == 2:
+		choice = play_SimpleStrat()
+	elif choice == 3:
+		choice = start()
+	return choice
+
+play()
+
+
+
+
+
