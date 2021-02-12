@@ -31,7 +31,7 @@ def running():
 	return blackPin != length # keeps running until there are 4 black pins, the length of the guess
 
 def start():
-	print('Secret code is: ',pattern, '\n') # For testing
+	print('Secret code is: ',pattern, '\n\n') # For testing
 	print('Make sure to enter your guess WITHOUT any spaces')
 	for attempt in range(guesses): # gives you 9 turns to guess the code before stopping
 		if not running():
@@ -54,9 +54,6 @@ def play():
 					   'Type the strategy number you want to use: '
 					  ))
 	print('-------------------------------------------------------\n')
-	if choice < 4:
-		print('Secret code is: ',code) # For testing
-		print('')
 	if choice == 1:
 		choice = play_WorstCaseStrat()
 	elif choice == 2:

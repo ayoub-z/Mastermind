@@ -123,6 +123,7 @@ def avg_case_strategy():
 def play_WorstCaseStrat():
 	c = 0 # Keeps track of turn number
 	global combis
+	print('Secret code is: ',code,'\n\n') # for testing
 	while True:
 		c += 1 
 		guess = worst_case_strategy()
@@ -143,6 +144,7 @@ def play_WorstCaseStrat():
 def play_SimpleStrat():
 	c = 0 
 	global combis
+	print('Secret code is: ',code,'\n\n') # for testing
 	while True:
 		c += 1
 		guess = simple_strategy()
@@ -166,6 +168,7 @@ def play_SimpleStrat():
 
 def play_AvgCaseStrat():
 	c = 0 
+	print('Secret code is: ',code,'\n\n') # for testing
 	global combis
 	while True:
 		c += 1
