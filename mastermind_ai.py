@@ -86,6 +86,9 @@ def worst_case_strategy():
 
 # Can't get any simpler
 def simple_strategy():
+	'''
+	bron: https://www.rug.nl/research/portal/files/9871441/icgamaster.pdf
+	'''
 	return combis[0]
 
 
