@@ -49,11 +49,12 @@ def play():
 					   'Let\'s start with choosing a strategy!\n\n'
 					   '1: Worst Case Strategy\n'
 					   '2: Simple Strategy\n'
-					   '3: I\'d rather guess the code myself \n\n'
+					   '3: Mystery Strategy\n'
+					   '4: I\'d rather guess the code myself \n\n'
 					   'Type the strategy number you want to use: '
 					  ))
-	print('------------------------------------------------------')
-	if choice < 3:
+	print('-------------------------------------------------------\n')
+	if choice < 4:
 		print('Secret code is: ',code) # For testing
 		print('')
 	if choice == 1:
@@ -61,6 +62,8 @@ def play():
 	elif choice == 2:
 		choice = play_SimpleStrat()
 	elif choice == 3:
+		choice = play_MysteryStrat()
+	elif choice == 4:
 		choice = start()
 	return choice
 
