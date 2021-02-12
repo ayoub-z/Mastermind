@@ -8,15 +8,12 @@ from itertools import product
 
 raw_combinations = list(product('abcdef', repeat=4)) # all possible combinations
 combis = sorted([''.join(i) for i in raw_combinations[:]]) # cleaned up and sorted list of combinations
+all_combis = combis[:] # keeps a list of all combinations at all times
 code = random.choice(combis) # secret code for testing
 
 
 # compares feedback of a guess, with a different possible guess to see if it has matching feedback
 def feedback_pins(guess, possible_guess):
-	'''
-	bron: https://repl.it/@ThomasS1/Mastermind
-	Regel 71
-	'''
 	blackPin = 0
 	whitePin = 0
 	guess = list(guess)
@@ -56,15 +53,11 @@ def reduce_function(guess):
 
 
 def worst_case_strategy():
-	'''
-	bron: https://repl.it/@ThomasS1/Mastermind
-	regel 458
-	'''
 	all_possibilities = {}
 	if len(combis) == 1296:
 		return ('aabb')
 	else:
-		for guess1 in combis:
+		for guess1 in all_combis:
 			possibilities = {}
 			for guess2 in combis:
 				possible_feedback = tuple(feedback_pins(guess1, guess2))  
@@ -73,10 +66,10 @@ def worst_case_strategy():
 				else:
 					possibilities[possible_feedback] = 1
 				all_possibilities[guess1] = max(possibilities.values())
-		bestChoice = min(all_possibilities.values())
+		best = min(all_possibilities.values())
 		guess = ''
 		for possible_guess in all_possibilities.keys():
-			if all_possibilities[possible_guess] == bestChoice:
+			if all_possibilities[possible_guess] == best:
 				guess = possible_guess
 		return guess
 
@@ -94,17 +87,20 @@ def play_WorstCaseStrat():
 	c = 0 # Keeps count on amount of guesses
 	global combis
 	while True:
-		c += 1 
 		guess = worst_case_strategy()
+		c += 1 
 		if len(combis) == 0: # Checks if 0 possibilites left
 			print('You probably gave wrong feedback pins. Try again')
 			quit()
 		print(f'Guess {c}: {guess}')
 		combis = reduce_function(guess)
 		print('\nAantal mogelijkheden2:',len(combis))
-		if len(combis) == 1: # Success message when secret code is found
+		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
 			print(f'Your code is: {combis[0]}')
 			print(f'Got it in {c} turns')
+			break
+		elif c >= 10:
+			print('rip...')
 			break
 		else:
 			continue
@@ -114,44 +110,22 @@ def play_SimpleStrat():
 	c = 0 # Keeps count on amount of guesses
 	global combis
 	while True:
-		c += 1 
+		# if len(combis) == 0: # Checks if 0 possibilites left
+		# 	print('You probably gave wrong feedback pins. Try again')
+		# 	quit()
 		guess = simple_strategy()
-		if len(combis) == 0: # Checks if 0 possibilites left
-			print('Woops, something went wrong. Most likely wrong feedback was given.')
-			quit()
+		c += 1 
 		print(f'Guess {c}: {guess}')
 		combis = reduce_function(guess)
 		print('\nAantal mogelijkheden2:',len(combis))
-		if len(combis) == 1: # Success message when secret code is found
+		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
 			print(f'Your code is: {combis[0]}')
 			print(f'Got it in {c} turns')
 			break
 		else:
 			continue
 
-def play_MysteryStrat():
-	pass
 
-def play():
-	os.system('clear')
-	choice = int(input(
-					   '====================Welcome==================== \n'
-					   'Let\'s start with choosing a strategy for the AI!\n\n'
-					   '1: Worst Case Strategy\n'
-					   '2: Simple Strategy\n'
-					   '3: I\'d rather guess the code myself \n\n'
-					   'Pick a strategy or type 3 to guess yourself: '
-					  ))
-	if choice < 3:
-		print('Secret code is: ',code) # For testing
-		print('')
-	if choice == 1:
-		choice = play_WorstCaseStrat()
-	elif choice == 2:
-		choice = play_SimpleStrat()
-	elif choice == 3:
-		choice = start()
-	return choice
 
 
 
