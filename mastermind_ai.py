@@ -1,7 +1,7 @@
 import os
 import random
 from itertools import product
-from mastermind2 import *
+
 
 #############
 # VARIABLES #
@@ -116,29 +116,7 @@ def play_SimpleStrat():
 			continue
 
 
-def play():
-	os.system('clear')
-	choice = int(input(
-					   '===============Welcome=============== \n'
-					   'Let\'s start with choosing a strategy!\n\n'
-					   '1: Worst Case Strategy\n'
-					   '2: Simple Strategy\n'
-					   '3: I\'d rather guess the code myself \n\n'
-					   'Type the strategy number you want to use: '
-					  ))
-	print('')
-	if choice < 3:
-		print('Secret code is: ',code) # For testing
-		print('')
-	if choice == 1:
-		choice = play_WorstCaseStrat()
-	elif choice == 2:
-		choice = play_SimpleStrat()
-	elif choice == 3:
-		choice = start()
-	return choice
 
-play()
 
 
 
