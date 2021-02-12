@@ -37,7 +37,6 @@ def feedback_pins(guess, possible_guess):
 	return [blackPin, whitePin]
 
 
-
 def reduce_function(guess):
 	# BlackPin = int(input('Black feedback_pins: '))
 	# WhitePin = int(input('White feedback_pins: '))
@@ -54,6 +53,7 @@ def reduce_function(guess):
 ##############
 # Strategies #
 ##############
+
 
 # Sorts possibilities based on worst possible outcome and chooses the best one out of those
 def worst_case_strategy():
@@ -93,6 +93,9 @@ def simple_strategy():
 # however, instead of sorting them on worst outcome and choosing the best one
 # it sorts them on the median outcome and chooses the best out of that, also starts with 'aabc'
 def avg_case_strategy():
+	'''
+	Heuristieke strategie
+	'''
 	all_possibilities = {}
 	if len(combis) == 1296:
 		return ('aabc')
