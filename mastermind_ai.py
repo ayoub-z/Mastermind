@@ -95,7 +95,7 @@ def play_WorstCaseStrat():
 		print(f'Guess {c}: {guess}')
 		combis = reduce_function(guess)
 		print('\nAantal mogelijkheden2:',len(combis))
-		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
+		if len(combis) == 1: # Success message if only 1 possibility left
 			print(f'Your code is: {combis[0]}')
 			print(f'Got it in {c} turns')
 			break
@@ -118,7 +118,7 @@ def play_SimpleStrat():
 		print(f'Guess {c}: {guess}')
 		combis = reduce_function(guess)
 		print('\nAantal mogelijkheden2:',len(combis))
-		if len(combis) == 1 or c >= 6: # Success message if only 1 possibility left
+		if len(combis) == 1: # Success message if only 1 possibility left
 			print(f'Your code is: {combis[0]}')
 			print(f'Got it in {c} turns')
 			break
@@ -126,7 +126,8 @@ def play_SimpleStrat():
 			continue
 
 
-
+def play_MysteryStrat():
+	pass
 
 
 
